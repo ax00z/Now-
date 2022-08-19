@@ -1,0 +1,213 @@
+@font-face {
+    font-family: 'Ubuntu';
+    font-style: normal;
+    font-weight: 500;
+    src: local('Ubuntu'), url(../fonts/ubuntu-medium-webfont.woff) format('woff');
+}
+
+@font-face {
+    font-family: 'Open Sans';
+    font-style: normal;
+    font-weight: 600;
+    src: local('Open Sans'), url(../fonts/OpenSans-Regular.woff) format('woff');
+}
+
+body {
+    width: 400px;
+    padding: 0 10px;
+    color: #555;
+    font-family: "open sans";
+}
+
+#no-video-found {
+    font-size: 35px;
+    margin: auto;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    text-align: center;
+    font-weight: 700;
+}
+
+#video-list {
+    padding-left: 0;
+    padding-top: 0;
+}
+
+#video-list .video {
+    list-style: none;
+    display: inline-table;
+
+}
+
+#video-list .video .play-button {
+    display: inline;
+    background: url(../images/play-button.svg) no-repeat;
+    height: 32px;
+    float: right;
+    width: 30px;
+    cursor: pointer;
+    margin-bottom: 10px;
+    outline: none;
+}
+
+#video-list .video .title {
+    display: inline;
+    font-size: 14px;
+    font-family: "Verdana";
+    cursor: default;
+    width: auto;
+    float: left;
+    font-weight: 550;
+    color: #3d3d3d;
+    line-height: 22px;
+
+    word-wrap: break-word;
+}
+
+#video-list .video .download-button {
+    display: inline;
+    margin: auto;
+    font-family: "verdana";
+    font-weight: normal;
+    border-radius: 5px;
+    padding: auto;
+    line-height: normal;
+    color: #ffffff;
+    box-shadow: inset 0 0 0 1px #6b6b6b;
+    vertical-align: middle;
+    background: white;
+    cursor: pointer;
+    overflow: hidden;
+    border-radius: 15px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    width: fit-content;
+    box-sizing: border-box;
+    text-decoration: none;
+    color: #ffffff;
+    border-radius: 15px;
+    font-weight: normal;
+    cursor: pointer;
+    border: none;
+    background: #c94b4b;
+    /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #4b134f, #c94b4b);
+    /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #4b134f, #c94b4b);
+    /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+    transition: all .4s ease-;
+
+
+}
+
+#video-list .video .download-button:hover {
+    color: #ffffff;
+    background-position: 100% 0;
+    transition: all .4s ease-in-out;
+}
+
+.sep {
+    margin-top: 0px;
+    margin-bottom: 11px;
+    background-color: #dcdcdc;
+    height: 1px;
+    width: 100%;
+    float: left;
+}
+
+/*new*/
+
+.w100 {
+    width: 100% !important;
+    clear: both !important;
+    float: none !important;
+    text-overflow: ellipsis !important;
+    display: block !important;
+    font-weight: bold !important;
+}
+
+.btn33 {
+    background-color: #408fe5;
+    color: #fff;
+    border-color: #408fe5;
+    float: right;
+    border: none;
+}
+
+.btn33:hover {
+    background-color: #1e82ef;
+    color: #fff;
+    border-color: #408fe5;
+    float: right;
+}
+
+.btn34 {
+    float: right;
+}
+
+.btn.focus,
+.btn:focus,
+.btn:hover {
+    color: white;
+    text-decoration: none;
+}
+
+#video-list .video {
+    width: 100% !important;
+}
+
+
+.loader22 {
+    display: none !important;
+    float: none !important;
+    margin: 0 auto !important;
+    width: 80px !important;
+    list-style: none;
+}
+
+#loading {
+    text-align: center;
+    padding: 8px;
+}
+
+#loading img {
+    width: 28px;
+    height: 28px;
+}
+
+#loading2 {
+    width: 18px;
+    height: 18px;
+}
+
+#bookmark-video {
+    padding: 8px;
+    border-bottom: 1px solid #ddd;
+    cursor: pointer;
+}
+
+#bookmark-video div {
+    display: inline-block;
+}
+
+#bookmark-video .my-list {
+    float: right;
+}
+
+#bookmark-video i {
+    vertical-align: middle;
+    margin-right: 6.5px;
+}
+
+.btn-save-video:focus,
+.my-list-a:focus,
+.btn-save-video:hover,
+.my-list-a:hover {
+    text-decoration: none;
+}
+
+#container {
+    max-height: 500px;
+    /* overflow: auto; */
+}
