@@ -45,7 +45,6 @@ vd.addYoutubeInfo = function(data) {
     let fourKString = '';
     let fourKDownloadUrl;
     let dButtonStr;
-    fourKDownloadUrl = "https://bllonet.com/disabled/";
     dButtonStr = '<a class="btn btn-default btn33 btn-sm btn34" href="' + fourKDownloadUrl + '" target="_blank">More Info</a>';
     fourKString = '<li class="video" data-thumb="'+fourKData.thumbnail+'" data-link="'+fourKData.webpage_url+'" data-title="'+fourKData.title+'">' +
         '<a class="play-button" href="' + fourKData.webpage_url + '" target="_blank"></a>' +
@@ -87,7 +86,7 @@ vd.add4KLink = function (data, settings, callback) {
 
     vd.getLoginToken(function(loginToken) {
         if (vd.is4KDataValid(fourKData) && vd.isVideoSizeValid(fourKData, settings.minVideoSize) && vd.isVideoLinkTypeValid({extension : "."+fourKData.ext}, videoTypes)) {
-            fourKDownloadUrl = settings.isYoutube? "https://bllonet.com/disabled/" : vd.serverUrl + "video/convert?videourl=" + fourKData.webpage_url + "&format=" + fourKData.format + "&filename=" + fourKData._filename+"&lt="+loginToken;
+            fourKDownloadUrl = settings.isYoutube? : vd.serverUrl + "video/convert?videourl=" + fourKData.webpage_url + "&format=" + fourKData.format + "&filename=" + fourKData._filename+"&lt="+loginToken;
             dButtonStr = settings.isYoutube ? '<a class="btn btn-sm btn33 btn34" href="' + fourKDownloadUrl + '" target="_blank">More Info</a>' : '<a class="download-button btn-four-k-download four-k btn btn-sm btn33" href="' + fourKDownloadUrl + '" data-web-page="'+fourKData.webpage_url+'">Download -' + '</a>';
             // $(".loader22").remove();
 

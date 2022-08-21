@@ -1,26 +1,33 @@
 {
-  "name": "Now!",
-  "description": "Download all the videos in a page",
-  "version": "1.0",
-  "manifest_version": 3,
-  "background": {
-    "service_worker": "background.js"
-  },
-  "permissions": ["storage", "activeTab", "scripting"],
-  "action": {
-    "default_popup": "popup.html",
-    "default_icon": {
-      "16": "/images/get_started16.png",
-      "32": "/images/get_started32.png",
-      "48": "/images/get_started48.png",
-      "128": "/images/get_started128.png"
-    }
-  },
-  "icons": {
-    "16": "/images/get_started16.png",
-    "32": "/images/get_started32.png",
-    "48": "/images/get_started48.png",
-    "128": "/images/get_started128.png"
-  },
-  "options_page": "options.html"
+   "background": {
+      "page": "html/background.html"
+   },
+   "browser_action": {
+      "default_icon": "icons/image.png",
+      "default_popup": "html/popup.html",
+      "default_title": "Now!"
+   },
+   "content_scripts": [ {
+      "all_frames": true,
+      "js": [ "js/jquery-3.1.1.min.js", "js/common.js", "js/contentscript.js" ],
+      "matches": [ "*://*/*" ],
+      "run_at": "document_end"
+   } ],
+
+   "icons": {
+        "128":"icons/icon128.png"
+   },
+
+   "manifest_version": 2,
+   "permissions": [ "tabs", "webRequest", "webRequestBlocking", "cookies","storage", "http://*/*", "https://*/*" ],
+   "name": "__MSG_name__",
+   "short_name": "__MSG_name__",
+   "description": "__MSG_desc__",
+   "default_locale": "en_US",
+   "version": "2.2.3",
+   "web_accessible_resources": [ "*" ],
+   "options_ui": {
+      "page": "html/options.html",
+      "open_in_tab": true
+   }
 }

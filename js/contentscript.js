@@ -125,7 +125,6 @@ vd.getYtDataForChrome = function () {
     // console.log(elem);
     // console.log(videoId);
     return {
-        url: "https://vidow.io/disabled/",
         fileName: document.title,
         title: document.title,
         webpage_url: window.location.href,

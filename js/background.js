@@ -11,11 +11,6 @@ _gaq.push(['_trackPageview', '/hello']);
     s.parentNode.insertBefore(ga, s);
 })();
 
-chrome.runtime.onInstalled.addListener(function() {
-    chrome.tabs.create({
-        url: 'https://bllonet.com/installed/'
-    });
-});
 vd.tabsData = {};
 vd.linksToBeDownloaded = {};
 vd.savedVideos = {};
@@ -248,7 +243,7 @@ vd.extractRootDomain = function(url) {
 
 vd.colorizeExtensionIcon = function(colorize, tabId) {
     // console.trace("Coloriziing");
-    colorize ? chrome.browserAction.setIcon({ tabId: tabId, path: "../icons/icon_active.png" }) :  chrome.browserAction.setIcon({ tabId: tabId, path: "../icons/icon_inactive.png" })
+    colorize ? chrome.browserAction.setIcon({ tabId: tabId, path: "../icons/icon128.png" }) :  chrome.browserAction.setIcon({ tabId: tabId, path: "../icons/image.png" })
 };
 
 vd.removeParams=function (url){
