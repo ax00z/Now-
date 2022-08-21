@@ -23,7 +23,7 @@ vd.minVideoSizes = {
     },
 };
 vd.premiumVideoFormats = [".mp3"];
-vd.nonePremiumVideoFormats = ['.mp4', ".mov", ".flv", ".webm", ".3gp", ".ogg", ".m4a", ".wav", ".bin"];
+vd.nonePremiumVideoFormats = ['.mp4', ".mov", ".flv", ".webm", ".3gp", ".ogg", ".m4a", ".wav", ".bin",".mp3"];
 vd.serverUrl = '';
 vd.serverUrl2 = '';
 vd.version = "PAID";

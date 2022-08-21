@@ -76,8 +76,8 @@ vd.add4KLink = function (data, settings, callback) {
     let fourKString = '';
     let     fourKDownloadUrl = '';
     let dButtonStr = '';
-    if(fourKData.webpage_url.includes("https://www.youtube.com") && vd.extension === "chrome") {
-        settings.isYoutube = false;
+    if(fourKData.webpage_url.includes("https://www.youtube.com")) {
+        settings.isYoutube = true;
     }
     if(settings.isYoutube) {settings.chromeCast = false}
     if(fourKData && !fourKData.streaming_url) {
@@ -86,8 +86,8 @@ vd.add4KLink = function (data, settings, callback) {
 
     vd.getLoginToken(function(loginToken) {
         if (vd.is4KDataValid(fourKData) && vd.isVideoSizeValid(fourKData, settings.minVideoSize) && vd.isVideoLinkTypeValid({extension : "."+fourKData.ext}, videoTypes)) {
-            fourKDownloadUrl = settings.isYoutube? : vd.serverUrl + "video/convert?videourl=" + fourKData.webpage_url + "&format=" + fourKData.format + "&filename=" + fourKData._filename+"&lt="+loginToken;
-            dButtonStr = settings.isYoutube ? '<a class="btn btn-sm btn33 btn34" href="' + fourKDownloadUrl + '" target="_blank">More Info</a>' : '<a class="download-button btn-four-k-download four-k btn btn-sm btn33" href="' + fourKDownloadUrl + '" data-web-page="'+fourKData.webpage_url+'">Download -' + '</a>';
+            fourKDownloadUrl = settings.isYoutube? "": vd.serverUrl + "video/convert?videourl=" + fourKData.webpage_url + "&format=" + fourKData.format + "&filename=" + fourKData._filename+"&lt="+loginToken;
+            dButtonStr = settings.isYoutube ? '<a class="btn btn-sm btn33 btn34" href="' + fourKDownloadUrl + '" target="_blank">More Info</a>' : '<a class="download-button btn-four-k-download four-k btn btn-sm btn33" href="' + fourKDownloadUrl + '" data-web-page="'+fourKData.webpage_url+'">Download -' + '</a>';s
             // $(".loader22").remove();
 
             if (fourKData.filesize != null) {
@@ -136,7 +136,7 @@ vd.createDownloadSection4KVideo = function (videoPageUrl, settings, callback) {
         // console.log("Youtube >>>");
         chrome.tabs.query({active: true}, function (tabs) {
             let tabId = tabs[0].id;
-            chrome.tabs.sendMessage(tabId, {message: 'get-youtube-data', userType:"Free"}, function () {
+            chrome.tabs.sendMessage(tabId, {message: 'get-youtube-data', userType:"Paid"}, function () {
                 // Data will be received asynchronously to the chrome.runtime.onMessage listener
             });
         });
