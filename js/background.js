@@ -2,14 +2,6 @@ var _gaq = _gaq || [];
 _gaq.push(['_setAccount', 'UA-120899131-1']);
 _gaq.push(['_trackPageview', '/hello']);
 
-(function() {
-    var ga = document.createElement('script');
-    ga.type = 'text/javascript';
-    ga.async = true;
-    ga.src = 'https://ssl.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0];
-    s.parentNode.insertBefore(ga, s);
-})();
 
 vd.tabsData = {};
 vd.linksToBeDownloaded = {};
@@ -18,7 +10,7 @@ var minVideoSize = "1";
 vd.isVideoUrl = function (url) {
     let isVideoUrl = false;
     vd.allVideoFormats.some(function (format) {
-        if(url.indexOf(format) !=-1) {
+        if (url.indexOf(format) != -1) {
             isVideoUrl = true;
             return true;
         }
@@ -32,7 +24,7 @@ vd.getVideoType = function (responseHeaders) {
     responseHeaders.some(function (responseHeader) {
         if (responseHeader.name.toLowerCase() === 'content-type') {
             vd.allVideoFormats.forEach(function (formatKey) {
-                if(responseHeader.value.indexOf(formatKey) !== -1 && !/^audio/i.test(responseHeader.value)) {
+                if (responseHeader.value.indexOf(formatKey) !== -1 && !/^audio/i.test(responseHeader.value)) {
                     videoType = formatKey;
                     return true;
                 }
@@ -45,15 +37,15 @@ vd.getVideoType = function (responseHeaders) {
 
 vd.getNewTabObject = function () {
     return {
-        videoLinks : [],
-        url : ""
+        videoLinks: [],
+        url: ""
     }
 };
 
 vd.getVideoSize = function (videoHeaders) {
     var size = 0;
     videoHeaders.forEach(function (header) {
-        if(header.name.toLowerCase() === "content-length") {
+        if (header.name.toLowerCase() === "content-length") {
             size = parseInt(header.value);
         }
     });
@@ -62,9 +54,9 @@ vd.getVideoSize = function (videoHeaders) {
 
 vd.getVideoDataFromServer = function (url, callback) {
     var request = new XMLHttpRequest();
-    request.onreadystatechange = function() {
-        if(request.readyState === 2) {
-            callback({mime: this.getResponseHeader("Content-Type"), size: this.getResponseHeader("Content-Length")});
+    request.onreadystatechange = function () {
+        if (request.readyState === 2) {
+            callback({ mime: this.getResponseHeader("Content-Type"), size: this.getResponseHeader("Content-Length") });
             request.abort();
         }
     };
@@ -77,7 +69,7 @@ vd.getFileName = function (str) {
     var escapedStr = "";
     str = Array.from(str);
     str.forEach(function (char) {
-        if(regex.test(char)) {
+        if (regex.test(char)) {
             escapedStr += char;
         }
     });
@@ -89,7 +81,7 @@ vd.isVideoLinkAlreadyAdded = function (videoLinksData, url) {
     //console.log(videoLinksData);
     var isAlreadyAdded = false;
     videoLinksData.some(function (videoLinkData) {
-        if(videoLinkData.url === url){
+        if (videoLinkData.url === url) {
             isAlreadyAdded = true;
             return true;
         }
@@ -107,7 +99,7 @@ vd.addVideoLinkToTabFinalStep = function (tabId, videoLink) {
     //console.log(videoLink);
     //console.log("Trying to add url "+ videoLink.url);
     // console.log(vd.isVideoSizeValid(videoLink, minVideoSize));
-    if(!vd.isVideoLinkAlreadyAdded(vd.tabsData[tabId].videoLinks, videoLink.url) && vd.isVideoSizeValid(videoLink, minVideoSize) && vd.isVideoUrl(videoLink.url)) {
+    if (!vd.isVideoLinkAlreadyAdded(vd.tabsData[tabId].videoLinks, videoLink.url) && vd.isVideoSizeValid(videoLink, minVideoSize) && vd.isVideoUrl(videoLink.url)) {
         vd.tabsData[tabId].videoLinks.push(videoLink);
         vd.updateExtensionIcon(tabId);
     }
@@ -126,8 +118,8 @@ vd.addVideoLinkToTab = function (videoLink, tabId, tabUrl) {
 };
 
 vd.inspectNetworkResponseHeaders = function (details) {
-    if(vd.linksToBeDownloaded[details.url]) {
-        details.responseHeaders.push({name: "Content-Disposition",value: "attachment; filename=\""+vd.linksToBeDownloaded[details.url]+"\""});
+    if (vd.linksToBeDownloaded[details.url]) {
+        details.responseHeaders.push({ name: "Content-Disposition", value: "attachment; filename=\"" + vd.linksToBeDownloaded[details.url] + "\"" });
         return {
             responseHeaders: details.responseHeaders
         };
@@ -135,10 +127,10 @@ vd.inspectNetworkResponseHeaders = function (details) {
     let root_domain = vd.extractRootDomain(details.url);
     let videoType = vd.getVideoType(details.responseHeaders);
 
-    if(root_domain !== 'vimeo.com' && videoType) {
+    if (root_domain !== 'vimeo.com' && videoType) {
         // console.log("Found video url");
         // console.log(details.url);
-        chrome.tabs.query({active: true}, function (tabs) {
+        chrome.tabs.query({ active: true }, function (tabs) {
             let tab = tabs[0];
             let tabId = tabs[0].id;
             vd.addVideoLinkToTab({
@@ -165,17 +157,17 @@ vd.escapeRegExp = function (str) {
 };
 
 vd.addVideoLinks = function (videoLinks, tabId, tabUrl) {
-    if(!vd.tabsData[tabId]) {
+    if (!vd.tabsData[tabId]) {
         vd.tabsData[tabId] = vd.getNewTabObject();
     }
-    if(tabUrl !== vd.tabsData[tabId].url) {
+    if (tabUrl !== vd.tabsData[tabId].url) {
         vd.tabsData[tabId].videoLinks = [];
         vd.tabsData[tabId].url = tabUrl;
     }
     videoLinks.forEach(function (videoLink) {
         // console.log(videoLink);
         videoLink.fileName = vd.getFileName(videoLink.fileName) + " - " + videoLink.quality + videoLink.extension;
-        if(tabUrl.includes("youtube.com")) {
+        if (tabUrl.includes("youtube.com")) {
             videoLink.size = 2048;
         } else {
             vd.getVideoDataFromServer(videoLink.url, function (videoData) {
@@ -194,16 +186,12 @@ vd.getVideoLinksForTab = function (tabId) {
 vd.downloadVideoLink = function (url, fileName) {
     // console.log(url+" (Downloading) : " + fileName);
     vd.linksToBeDownloaded[url] = fileName;
-    chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
-        chrome.tabs.update(tabs[0].id, {"url": url, "selected":false}, function(tab){});
+    chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+        chrome.tabs.update(tabs[0].id, { "url": url, "selected": false }, function (tab) { });
     });
 };
-vd.castVideo = function (url) {
 
-
-};
-
-vd.extractHostname =  function(url) {
+vd.extractHostname = function (url) {
     var hostname;
     //find & remove protocol (http, ftp, etc.) and get hostname
 
@@ -223,7 +211,7 @@ vd.extractHostname =  function(url) {
 };
 
 // To address those who want the "root domain," use this function:
-vd.extractRootDomain = function(url) {
+vd.extractRootDomain = function (url) {
     var domain = vd.extractHostname(url),
         splitArr = domain.split('.'),
         arrLen = splitArr.length;
@@ -241,40 +229,40 @@ vd.extractRootDomain = function(url) {
     return domain;
 };
 
-vd.colorizeExtensionIcon = function(colorize, tabId) {
+vd.colorizeExtensionIcon = function (colorize, tabId) {
     // console.trace("Coloriziing");
-    colorize ? chrome.browserAction.setIcon({ tabId: tabId, path: "../icons/icon128.png" }) :  chrome.browserAction.setIcon({ tabId: tabId, path: "../icons/image.png" })
+    colorize ? chrome.browserAction.setIcon({ tabId: tabId, path: "../icons/icon128.png" }) : chrome.browserAction.setIcon({ tabId: tabId, path: "../icons/image.png" })
 };
 
-vd.removeParams=function (url){
+vd.removeParams = function (url) {
     return url.replace(/[#\?].*$/, '');
 };
 
 
-vd.on4KDataReceived = function(result, tab) {
+vd.on4KDataReceived = function (result, tab) {
     // console.log(result);
     let fourKData = typeof result === 'string' ? JSON.parse(result) : result;
     fourKData.tabUrl = tab.url;
     vd.getStoredSettings(function (items) {
         let isLoggedInAndUpgraded = (items.logged_in && items.upgraded !== 'false');
-        if(fourKData.title && vd.isVideoLinkTypeValid({extension : "."+fourKData.ext}, items.videoTypes) && isLoggedInAndUpgraded) {
+        if (fourKData.title && vd.isVideoLinkTypeValid({ extension: "." + fourKData.ext }, items.videoTypes) && isLoggedInAndUpgraded) {
             vd.colorizeExtensionIcon(true, tab.id);
         }
     });
     vd.storeFourKData(fourKData);
 };
 
-vd.getAllSavedVideoData = function() {
-    vd.isLoggedInAndUpgraded(function(bool) {
+vd.getAllSavedVideoData = function () {
+    vd.isLoggedInAndUpgraded(function (bool) {
         // console.log("Is logged in and upgraded", bool);
-        if(!bool && vd.version !== "FREE") { return }
-        $.get(vd.serverUrl+"video_list/get_all_video_data", function (response) {
+        if (!bool && vd.version !== "FREE") { return }
+        $.get(vd.serverUrl + "video_list/get_all_video_data", function (response) {
             response = vd.convertToJson(response);
             let savedVideos = {};
-            if(!response.status) {
-                if(response.statusDescription === "Login required") {
-                    vd.autoLogin(function(response) {
-                        if(response.status) {
+            if (!response.status) {
+                if (response.statusDescription === "Login required") {
+                    vd.autoLogin(function (response) {
+                        if (response.status) {
                             vd.getAllSavedVideoData();
                         }
                     });
@@ -289,40 +277,41 @@ vd.getAllSavedVideoData = function() {
     });
 };
 
-vd.getSavedVideoData = function(md5) {
-    $.get(vd.serverUrl+"video_list/get_saved_video?unique_id="+md5, function (response) {
+vd.getSavedVideoData = function (md5) {
+    $.get(vd.serverUrl + "video_list/get_saved_video?unique_id=" + md5, function (response) {
         response = vd.convertToJson(response);
-        if(!response.status) {
-            if(response.statusDescription === "Login required") {
-                vd.autoLogin(function(response) {
-                    if(response.status) {
+        if (!response.status) {
+            if (response.statusDescription === "Login required") {
+                vd.autoLogin(function (response) {
+                    if (response.status) {
                         vd.vd.getSavedVideoData(md5);
                     }
                 });
             }
-            return}
+            return
+        }
         response.videos.forEach(function (video) {
             vd.savedVideos[video.md5] = video;
         });
     });
 };
 
-vd.onWebPageLoaded = function(tab) {
-    vd.isLoggedInAndUpgraded(function(bool) {
-        if(!vd.bg4KVideoCheckForAllUsers && !bool) {
+vd.onWebPageLoaded = function (tab) {
+    vd.isLoggedInAndUpgraded(function (bool) {
+        if (!vd.bg4KVideoCheckForAllUsers && !bool) {
             return
         }
-        if(vd.requestedUrlInfo[tab.url]) { return; }
+        if (vd.requestedUrlInfo[tab.url]) { return; }
         vd.requestedUrlInfo[tab.url] = 1;
-        if(chrome.runtime.lastError){
-           // console.log("error: ", chrome.runtime.lastError);
+        if (chrome.runtime.lastError) {
+            // console.log("error: ", chrome.runtime.lastError);
         }
         let urlId = md5(tab.url);
         let fourKData = JSON.parse(localStorage.getItem(urlId));
         vd.is4KDataExpired(fourKData, function (expired) {
             // console.log("is expired", expired);
             // console.log(fourKData);
-            if(expired){
+            if (expired) {
                 vd.get4KData(tab.url, function (data) {
                     delete vd.requestedUrlInfo[tab.url];
                     vd.on4KDataReceived(data, tab);
@@ -330,7 +319,7 @@ vd.onWebPageLoaded = function(tab) {
             } else {
                 vd.getStoredSettings(function (items) {
                     fourKData = fourKData.value;
-                    if(fourKData.title && vd.isVideoLinkTypeValid({extension : "."+fourKData.ext}, items.videoTypes)) {
+                    if (fourKData.title && vd.isVideoLinkTypeValid({ extension: "." + fourKData.ext }, items.videoTypes)) {
                         vd.colorizeExtensionIcon(true, tab.id);
                     }
                 })
@@ -352,7 +341,7 @@ vd.getVideoTypeFromUrl = function (link) {
     return videoType;
 };
 
-vd.getVimeoDataFromServer = function(dataUrl, tab) {
+vd.getVimeoDataFromServer = function (dataUrl, tab) {
     // console.log(dataUrl);
     // console.log(tab);
     $.get(dataUrl.trim(), function (response) {
@@ -377,91 +366,52 @@ vd.getVimeoDataFromServer = function(dataUrl, tab) {
     });
 };
 
-vd.getLoginStatus = function() {
-   /* $.get(vd.serverUrl+"login_status", function (response) {
-        response = typeof response == 'string' ? JSON.parse(response) : response;
-        if(!response.status) {return}
-        chrome.storage.sync.set({
-            logged_in: response.data.logged_in,
-            upgraded: response.data.upgraded ? "true" : "false",
-        }, function () {
-        });
-    });*/
-    chrome.cookies.get({url: vd.serverUrl, "name":"auth"}, function(data){
-        var loginStatus = {
-            logged_in: true,
-            upgraded: 'true'
-        };
-        try{
-            loginStatus = JSON.parse(decodeURIComponent(data.value));
-        }catch(e) {
-        }
-        // console.log(loginStatus);
-        chrome.storage.sync.set({
-            logged_in: loginStatus.logged_in,
-            upgraded: loginStatus.upgraded ? 'true' : 'false'
-        }, function () {
-        });
-    })
-};
 
-vd.syncData = function () {
-    // console.log("Syncing data");
-    vd.getAllSavedVideoData();
-    vd.getLoginStatus();
-};
-
-vd.syncData();
-
-setInterval(function () {
-    // console.log("Getting saved video data");
-    vd.syncData();
-}, 30000);
 
 vd.getStoredSettings(function (items) {
     minVideoSize = items.minVideoSize
 });
 
-chrome.runtime.onInstalled.addListener(function(details){
-  if(details.reason === "install"){
-    localStorage.setItem('total_number_of_downloads',0);
-  }
+chrome.runtime.onInstalled.addListener(function (details) {
+    if (details.reason === "install") {
+        localStorage.setItem('total_number_of_downloads', 0);
+    }
 });
 
-chrome.webRequest.onHeadersReceived.addListener(function(details){
-        // For chrome casting youtube
+chrome.webRequest.onHeadersReceived.addListener(function (details) {
+    // For chrome casting youtube
     // console.log("Google video on header received");
     // console.log(details.url);
-        let hasAccessOrigin = false;
-        details.responseHeaders.forEach(function(v,i,a){
-            let name = v.name.toLocaleLowerCase();
-            if( name === "access-control-allow-origin"){
-                hasAccessOrigin = true;
-            }
-        });
-        if(!hasAccessOrigin) {
-            details.responseHeaders.push({name:"Access-Control-Allow-Origin",value:"*"});
+    let hasAccessOrigin = false;
+    details.responseHeaders.forEach(function (v, i, a) {
+        let name = v.name.toLocaleLowerCase();
+        if (name === "access-control-allow-origin") {
+            hasAccessOrigin = true;
         }
-        return {responseHeaders:details.responseHeaders}; //I kill the redirect
-    },
-    {urls: ["https://*.googlevideo.com/*"]},["responseHeaders","blocking"]);
+    });
+    if (!hasAccessOrigin) {
+        details.responseHeaders.push({ name: "Access-Control-Allow-Origin", value: "*" });
+    }
+    return { responseHeaders: details.responseHeaders }; //I kill the redirect
+},
+    { urls: ["https://*.googlevideo.com/*"] }, ["responseHeaders", "blocking"]);
 
 chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
-    if(!changeInfo.url) {return}
+    if (!changeInfo.url) { return }
     // console.log(changeInfo);
     // console.log("Tab updated");
     vd.colorizeExtensionIcon(false, tabId);
     vd.resetVideoLinks(tabId);
-    chrome.tabs.sendMessage(tabId, {message: "initialize-page", url: changeInfo.url});
+    chrome.tabs.sendMessage(tabId, { message: "initialize-page", url: changeInfo.url });
 });
 
 chrome.tabs.onRemoved.addListener(function (tabId) {
-  if(vd.tabsData[tabId]) {
-    delete vd.tabsData[tabId];
-  }
+    if (vd.tabsData[tabId]) {
+        delete vd.tabsData[tabId];
+    }
 });
 
-chrome.webRequest.onHeadersReceived.addListener(vd.inspectNetworkResponseHeaders, {urls: ["<all_urls>"]}, ["blocking","responseHeaders"]);
+chrome.webRequest.onHeadersReceived.addListener(vd.inspectNetworkResponseHeaders, { urls: ["<all_urls>"] }, ["blocking", "responseHeaders"]);
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     // console.log(request);
@@ -476,43 +426,43 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
             vd.addVideoLinks(request.videoLinks, sender.tab.id, sender.tab.url);
             sendResponse("Message received.");
             break;
-        case "on-web-page-loaded" :
+        case "on-web-page-loaded":
             vd.onWebPageLoaded(sender.tab);
             sendResponse("Received the message.");
             break;
-        case "get-video-links" :
+        case "get-video-links":
             sendResponse(vd.getVideoLinksForTab(request.tabId));
             break;
-        case "download-video-link" :
+        case "download-video-link":
             vd.downloadVideoLink(request.url, request.fileName);
             break;
-        case "show-youtube-warning" :
+        case "show-youtube-warning":
             vd.showYoutubeWarning();
             break;
-        case "cast-video" :
+        case "cast-video":
             vd.castVideo(request.url);
             break;
-        case "is-video-saved" :
+        case "is-video-saved":
             sendResponse(vd.savedVideos[request.tabUrlMd5]);
             break;
-        case "add-saved-video" :
+        case "add-saved-video":
             vd.savedVideos[request.video.md5] = request.video;
             sendResponse();
             break;
-        case "remove-saved-video" :
+        case "remove-saved-video":
             delete vd.savedVideos[request.tabUrlMd5];
             sendResponse();
             break;
-        case "create-vimeo-video-links" :
+        case "create-vimeo-video-links":
             vd.getVimeoDataFromServer(request.dataUrl, sender.tab);
             sendResponse("Message received.");
             break;
-        case "activate-ext-icon" :
-            if(sender.tab) {
+        case "activate-ext-icon":
+            if (sender.tab) {
                 vd.colorizeExtensionIcon(request.activate, sender.tab.id);
             }
             break;
-        case "update-min-vid-size" :
+        case "update-min-vid-size":
             minVideoSize = request.minVideoSize;
             break;
     }

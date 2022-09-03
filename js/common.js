@@ -1,29 +1,29 @@
 var vd = {};
-vd.fourKDataExpTimeFree = 60*60*1000; // 1 hour
-vd.fourKDataExpTimePremium = 5*60*1000; // 5 minutes
-vd.fourKEmptyDataExpTime = 5*60*1000; // 5 minutes
+vd.fourKDataExpTimeFree = 60 * 60 * 1000; // 1 hour
+vd.fourKDataExpTimePremium = 5 * 60 * 1000; // 5 minutes
+vd.fourKEmptyDataExpTime = 5 * 60 * 1000; // 5 minutes
 vd.bg4KVideoCheckForAllUsers = false; // values: true, false
 vd.allVideoFormats = ['mp4', "mov", "flv", "webm", "3gp", "ogg", "m4a", "mp3", "wav", "bin"];
 vd.defaultVideoFormats = ['.mp4', ".mov", ".flv", ".webm", ".3gp", ".ogg", ".m4a", ".wav", ".bin"];
 vd.minVideoSizes = {
-    "1" :{
+    "1": {
         bytes: 100 * 1024,
         text: "100 KB",
         id: "1"
     },
-    "2" :{
+    "2": {
         bytes: 1024 * 1024,
         text: "1 MB",
         id: "2"
     },
-    "3" :{
+    "3": {
         bytes: 2 * 1024 * 1024,
         text: "2 MB",
         id: "3"
     },
 };
 vd.premiumVideoFormats = [".mp3"];
-vd.nonePremiumVideoFormats = ['.mp4', ".mov", ".flv", ".webm", ".3gp", ".ogg", ".m4a", ".wav", ".bin",".mp3"];
+vd.nonePremiumVideoFormats = ['.mp4', ".mov", ".flv", ".webm", ".3gp", ".ogg", ".m4a", ".wav", ".bin", ".mp3"];
 vd.serverUrl = '';
 vd.serverUrl2 = '';
 vd.version = "PAID";
@@ -37,21 +37,21 @@ vd.isVideoLinkTypeValid = function (videoLink, videoTypes) {
     return isValidType;
 };
 
-vd.isVideoSizeValid = function(data, minVideoSize) {
+vd.isVideoSizeValid = function (data, minVideoSize) {
     minVideoSize = vd.minVideoSizes[minVideoSize].bytes;
     var isValid = true;
-    if(!data) {return isValid}
+    if (!data) { return isValid }
     var vSize = parseInt(data.filesize ? data.filesize : data.size);
-    if(isNaN(vSize)) {
+    if (isNaN(vSize)) {
         return isValid;
     }
     return (vSize > minVideoSize);
 };
 
 vd.ignoreError = function () {
-    if(chrome.runtime.lastError){
+    if (chrome.runtime.lastError) {
         console.log("error: ", chrome.runtime.lastError);
-    }else{
+    } else {
     }
 };
 
@@ -67,26 +67,26 @@ vd.getLoginToken = function (callback) {
     })
 };
 
-vd.autoLogin = function(callback) {
+vd.autoLogin = function (callback) {
     chrome.storage.sync.get({
         login_token: true
-    }, function(items) {
-        if(!items.login_token) {
-            callback({status: 1});
+    }, function (items) {
+        if (!items.login_token) {
+            callback({ status: 1 });
             return;
         }
-        $.get(vd.serverUrl+"autoLogin/"+ items.login_token, function (response) {
+        $.get(vd.serverUrl + "autoLogin/" + items.login_token, function (response) {
             response = vd.convertToJson(response);
-            if(!response.status) {
-                callback({status: 0});
+            if (!response.status) {
+                callback({ status: 0 });
                 return;
             }
-            callback({status: 1});
+            callback({ status: 1 });
         });
     });
 };
 
-vd.isLoggedInAndUpgraded = function(callback) {
+vd.isLoggedInAndUpgraded = function (callback) {
     chrome.storage.sync.get({
         logged_in: true,
         upgraded: 'true'
@@ -95,14 +95,14 @@ vd.isLoggedInAndUpgraded = function(callback) {
     });
 };
 
-vd.is4KDataValid = function(fourKData) {
+vd.is4KDataValid = function (fourKData) {
     // console.log("Validation check", fourKData);
     var isValid = fourKData && (fourKData.title != null || (fourKData.value && fourKData.value.title != null)) && fourKData.ext !== 'unknown_video';
     // console.log(!!isValid);
     return !!isValid;
 };
 
-vd.storeFourKData = function(fourKData) {
+vd.storeFourKData = function (fourKData) {
     // console.log("Saving data");
     // console.log(fourKData);
     var url = fourKData.tabUrl ? fourKData.tabUrl : fourKData.webpage_url;
@@ -121,9 +121,9 @@ vd.get4KData = function (videoUrl, callback) {
         url: vd.serverUrl2 + "getinfo.php",
         type: "GET",
         contentType: "json",
-        data: {videourl: encodeURIComponent(videoUrl)},
+        data: { videourl: encodeURIComponent(videoUrl) },
         success: function (data) {
-            if(!data) {
+            if (!data) {
                 callback(false);
                 return;
             }
@@ -136,25 +136,25 @@ vd.get4KData = function (videoUrl, callback) {
 };
 
 
-vd.is4KDataExpired = function(fourKData, callback) {
+vd.is4KDataExpired = function (fourKData, callback) {
     // console.log(fourKData);
-    if(!fourKData || !fourKData.time) {
+    if (!fourKData || !fourKData.time) {
         // console.log("YYYY");
         callback(true);
         return;
     }
     // console.log(new Date(fourKData.time));
-    if(!vd.is4KDataValid(fourKData)) {
+    if (!vd.is4KDataValid(fourKData)) {
         callback(new Date().getTime() - fourKData.time > vd.fourKEmptyDataExpTime);
         return;
     }
     vd.isLoggedInAndUpgraded(function (bool) {
         // console.log("upgraded", bool);
-       if(bool) {
-           callback(new Date().getTime() - fourKData.time > vd.fourKDataExpTimePremium);
-       } else {
-           callback(new Date().getTime() - fourKData.time > vd.fourKDataExpTimeFree);
-       }
+        if (bool) {
+            callback(new Date().getTime() - fourKData.time > vd.fourKDataExpTimePremium);
+        } else {
+            callback(new Date().getTime() - fourKData.time > vd.fourKDataExpTimeFree);
+        }
     });
 
 };
@@ -163,8 +163,6 @@ vd.is4KDataExpired = function(fourKData, callback) {
 vd.getStoredSettings = function (callback) {
     chrome.storage.sync.get({
         videoTypes: vd.defaultVideoFormats,
-        chromeCast: true,
-        /*videoResolutions: [],*/
         useProxy: false,
         proxyType: '',
         proxyIP: '',
@@ -177,11 +175,10 @@ vd.getStoredSettings = function (callback) {
         upgraded: 'true'
     }, function (items) {
         // console.log(items);
-        if(vd.version === "FREE" && items.upgraded === "true") {
-            items.videoTypes = items.videoTypes.filter(function (videoType) {
-                return vd.premiumVideoFormats.indexOf(videoType) === -1;
-            });
-        }
+        items.videoTypes = items.videoTypes.filter(function (videoType) {
+            return vd.premiumVideoFormats.indexOf(videoType) === -1;
+        });
+
         callback(items);
     });
 };
