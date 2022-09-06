@@ -1,60 +1,86 @@
 body {
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: "Calibri Light", Helvetica, Arial, sans-serif;
     font-size: 14px;
     line-height: 1.42857143;
-    color: #333;
-    background-color: #212121;
+    color: black;
+    cursor: pointer;
+    background: #4C586F;
+    transition: all .4s ease-;
+
 }
 
 
-.checkbox-inline + .checkbox-inline, .radio-inline + .radio-inline {
-    margin-top: 0;
-    margin-right: 10px;
-    margin-left: 0;
+.checkbox-inline+.checkbox-inline,
+.radio-inline+.radio-inline {
+    margin-top: 2px;
+    margin-right: 6px;
+    margin-left: 6px;
 }
+
+
+
+
 .section .section-content {
-    border-radius: 3px;
-    background: #fff;
+    border-radius: 6px;
+    background: #f6d258;
+
 }
+
 .section .section-title {
-    font-size: 16px;
-    color: #fff;
-    line-height: 32px;
-    margin-bottom: 10px;
+    font-size: 46px;
+    font: bolder;
+    color: cornsilk;
+    line-height: 36px;
+    margin-bottom: 20px;
+    margin-top: 20px;
+    margin-block-start: auto;
 }
+
 .section .section-content .section-option.vertical .label {
-    line-height: 49px;
+    line-height: 40px;
 }
+
 .section .section-content .section-option {
     font-size: 14px;
-    padding: 0 20px;
-    overflow: hidden;
+    margin-left: 10px;
+    padding: 10px 10px 2px 2px;
+    width: fit-content;
+    overflow:visible;
 }
+
 .section {
-    margin-bottom: 25px;
-    overflow: hidden;
+    margin-bottom: 16px;
+    overflow: visible;
 }
+
 .main {
-    width: 680px;
-    padding: 15px 0 25px;
+    width: fit-content;
+    padding: 26px;
     margin: 0 auto;
-    }
+}
 
 .action-area {
-margin-top: 15px;
-    }
+    margin-top: 12px;
+}
 
 .btn-primary {
     color: #fff;
-    background-color: #377eec;
-    border-color: #357ef3;
+    background-color: #0066ff;
+    padding-left: 100px;
+    font-style: italic;
+    
+}
+
+.update-min-vid-size {
+    font: 100px;
 }
 
 .btn-primary:hover {
-    color: #fff;
-    background-color: #1f6ee8;
-    border-color: #1f6ee8;
+    color: aquamarine;
+    background-color: #0066ff;
+    border-color: greenyellow;
 }
+
 .form-check-inline {
     display: inline-block;
     margin-right: 8px;

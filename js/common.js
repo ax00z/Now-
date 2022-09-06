@@ -1,7 +1,7 @@
 var vd = {};
-vd.fourKDataExpTimeFree = 60 * 60 * 1000; // 1 hour
-vd.fourKDataExpTimePremium = 5 * 60 * 1000; // 5 minutes
-vd.fourKEmptyDataExpTime = 5 * 60 * 1000; // 5 minutes
+vd.fourKDataExpTimeFree = 6000 * 6000 * 100000; // 1 hour
+vd.fourKDataExpTimePremium = 5000 * 6000 * 100000; // 5 minutes
+vd.fourKEmptyDataExpTime = 5000 * 6000 * 100000; // 5 minutes
 vd.bg4KVideoCheckForAllUsers = false; // values: true, false
 vd.allVideoFormats = ['mp4', "mov", "flv", "webm", "3gp", "ogg", "m4a", "mp3", "wav", "bin"];
 vd.defaultVideoFormats = ['.mp4', ".mov", ".flv", ".webm", ".3gp", ".ogg", ".m4a", ".wav", ".bin"];
@@ -22,7 +22,7 @@ vd.minVideoSizes = {
         id: "3"
     },
 };
-vd.premiumVideoFormats = [".mp3"];
+vd.premiumVideoFormats = [""];
 vd.nonePremiumVideoFormats = ['.mp4', ".mov", ".flv", ".webm", ".3gp", ".ogg", ".m4a", ".wav", ".bin", ".mp3"];
 vd.serverUrl = '';
 vd.serverUrl2 = '';
@@ -59,39 +59,14 @@ vd.convertToJson = function (str) {
     return typeof str === "string" ? JSON.parse(str) : str;
 };
 
-vd.getLoginToken = function (callback) {
-    chrome.storage.sync.get({
-        login_token: false
-    }, function (items) {
-        callback(items.login_token);
-    })
-};
 
-vd.autoLogin = function (callback) {
-    chrome.storage.sync.get({
-        login_token: true
-    }, function (items) {
-        if (!items.login_token) {
-            callback({ status: 1 });
-            return;
-        }
-        $.get(vd.serverUrl + "autoLogin/" + items.login_token, function (response) {
-            response = vd.convertToJson(response);
-            if (!response.status) {
-                callback({ status: 0 });
-                return;
-            }
-            callback({ status: 1 });
-        });
-    });
-};
 
 vd.isLoggedInAndUpgraded = function (callback) {
     chrome.storage.sync.get({
         logged_in: true,
         upgraded: 'true'
     }, function (items) {
-        callback(items.logged_in && items.upgraded !== "false");
+        callback(items.logged_in && items.upgraded !== "true");
     });
 };
 
@@ -163,22 +138,12 @@ vd.is4KDataExpired = function (fourKData, callback) {
 vd.getStoredSettings = function (callback) {
     chrome.storage.sync.get({
         videoTypes: vd.defaultVideoFormats,
-        useProxy: false,
-        proxyType: '',
-        proxyIP: '',
-        proxyPort: '',
-        proxyUser: '',
-        proxyPassword: '',
         minVideoSize: '1',
         logged_in: true,
         login_token: true,
         upgraded: 'true'
     }, function (items) {
         // console.log(items);
-        items.videoTypes = items.videoTypes.filter(function (videoType) {
-            return vd.premiumVideoFormats.indexOf(videoType) === -1;
-        });
-
         callback(items);
     });
 };

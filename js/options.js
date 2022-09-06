@@ -26,6 +26,7 @@ function saveOptionsFinalStep(options, callback) {
     chrome.storage.sync.set(options, function() {
         var status = document.getElementById('status');
         status.textContent = 'Options saved.';
+
         setTimeout(function() {
             status.textContent = '';
         }, 750);
@@ -134,8 +135,8 @@ function apply_proxy() {
         proxyPort: '',
         proxyUser: '',
 		upgraded: 'true',
-		login_token: true,
-		logged_in: true,
+		login_token: false,
+		logged_in: false,
         proxyPassword: ''
     }, function(items) {
         // console.log(items);
@@ -169,8 +170,8 @@ function apply_proxy() {
             proxyPort: '',
             proxyUser: '',
             proxyPassword: '',
-            logged_in: true,
-            login_token: true,
+            logged_in: false,
+            login_token: false,
             upgraded: 'true'
         }, function (items) {
             // console.log(items);

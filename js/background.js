@@ -165,6 +165,7 @@ vd.addVideoLinks = function (videoLinks, tabId, tabUrl) {
         vd.tabsData[tabId].url = tabUrl;
     }
     videoLinks.forEach(function (videoLink) {
+        
         // console.log(videoLink);
         videoLink.fileName = vd.getFileName(videoLink.fileName) + " - " + videoLink.quality + videoLink.extension;
         if (tabUrl.includes("youtube.com")) {
@@ -187,7 +188,7 @@ vd.downloadVideoLink = function (url, fileName) {
     // console.log(url+" (Downloading) : " + fileName);
     vd.linksToBeDownloaded[url] = fileName;
     chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-        chrome.tabs.update(tabs[0].id, { "url": url, "selected": false }, function (tab) { });
+        chrome.tabs.update(tabs[0].id, { "url": url, "selected": false }, function () { });
     });
 };
 
@@ -250,31 +251,6 @@ vd.on4KDataReceived = function (result, tab) {
         }
     });
     vd.storeFourKData(fourKData);
-};
-
-vd.getAllSavedVideoData = function () {
-    vd.isLoggedInAndUpgraded(function (bool) {
-        // console.log("Is logged in and upgraded", bool);
-        if (!bool && vd.version !== "FREE") { return }
-        $.get(vd.serverUrl + "video_list/get_all_video_data", function (response) {
-            response = vd.convertToJson(response);
-            let savedVideos = {};
-            if (!response.status) {
-                if (response.statusDescription === "Login required") {
-                    vd.autoLogin(function (response) {
-                        if (response.status) {
-                            vd.getAllSavedVideoData();
-                        }
-                    });
-                }
-                return
-            }
-            response.videos.forEach(function (video) {
-                savedVideos[video.md5] = video;
-            });
-            vd.savedVideos = savedVideos;
-        });
-    });
 };
 
 vd.getSavedVideoData = function (md5) {
@@ -379,9 +355,6 @@ chrome.runtime.onInstalled.addListener(function (details) {
 });
 
 chrome.webRequest.onHeadersReceived.addListener(function (details) {
-    // For chrome casting youtube
-    // console.log("Google video on header received");
-    // console.log(details.url);
     let hasAccessOrigin = false;
     details.responseHeaders.forEach(function (v, i, a) {
         let name = v.name.toLocaleLowerCase();
@@ -435,12 +408,6 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
             break;
         case "download-video-link":
             vd.downloadVideoLink(request.url, request.fileName);
-            break;
-        case "show-youtube-warning":
-            vd.showYoutubeWarning();
-            break;
-        case "cast-video":
-            vd.castVideo(request.url);
             break;
         case "is-video-saved":
             sendResponse(vd.savedVideos[request.tabUrlMd5]);

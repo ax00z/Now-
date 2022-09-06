@@ -2,6 +2,7 @@ vd.sendMessage = function (message, callback) {
     chrome.runtime.sendMessage(message, callback);
 };
 
+
 vd.escapeRegExp = function (str) {
     return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
 };
@@ -29,7 +30,7 @@ vd.getAbsolutePath = function (link) {
     var stack = window.location.href.split("/"),
         parts = link.split("/");
     stack.pop(); // remove current file name (or empty string)
-                 // (omit if "base" is the current folder without trailing slash)
+    // (omit if "base" is the current folder without trailing slash)
     for (var i = 0; i < parts.length; i++) {
         if (parts[i] == ".")
             continue;
@@ -107,7 +108,7 @@ vd.mutationObserver = new MutationObserver(function (mutations) {
 vd.sendVimeoVideoLinks = function () {
     // console.log("Found Vimeo Videos");
     var dataUrl = $("div[data-config-url]").attr('data-config-url');
-    vd.sendMessage({message: "create-vimeo-video-links", dataUrl: dataUrl}, function (response) {
+    vd.sendMessage({ message: "create-vimeo-video-links", dataUrl: dataUrl }, function () {
     });
 };
 
@@ -120,7 +121,7 @@ vd.inIframe = function () {
 };
 
 vd.getYtDataForChrome = function () {
-    let elem =  $('[video-id]');
+    let elem = $('[video-id]');
     let videoId = elem.attr('video-id');
     // console.log(elem);
     // console.log(videoId);
@@ -134,18 +135,19 @@ vd.getYtDataForChrome = function () {
     }
 };
 
-vd.waitUntilYoutubeLoads = function(callback) {
-    let elem =  $('[video-id]');
+vd.waitUntilYoutubeLoads = function (callback) {
+    let elem = $('[video-id]');
     let videoId = elem.attr('video-id');
-    if(!vd.ytRetriedCount) {
+    if (!vd.ytRetriedCount) {
         vd.ytRetriedCount = 0;
     }
     // console.log("Waiting until youtube loads");
-    if(!elem.length || !videoId) {
-        if(vd.ytRetriedCount < 10) {
+    
+    if (!elem.length || !videoId) {
+        if (vd.ytRetriedCount < 10) {
             setTimeout(function () {
                 vd.waitUntilYoutubeLoads(callback);
-            }, 500);
+            }, 15000);
         }
         vd.ytRetriedCount++;
         return 0;
@@ -154,18 +156,14 @@ vd.waitUntilYoutubeLoads = function(callback) {
     callback();
 };
 
-vd.sendYoutubeVideoDataForChrome = function(userType) {
-    if(vd.extension !== "chrome") {
-        return;
-    }
+vd.sendYoutubeVideoDataForChrome = function (userType) {
+
     vd.waitUntilYoutubeLoads(function () {
         let videoLinks = [];
         videoLinks.push(vd.getYtDataForChrome());
-        if(userType && userType === "Free") {
-            vd.sendMessage({message: 'add-youtube-info-for-chrome', videoLinks: videoLinks});
-        } else {
-            vd.sendVideoLinks(videoLinks);
-        }
+
+        vd.sendMessage({ message: 'add-youtube-info-for-chrome', videoLinks: videoLinks });
+
     })
 };
 
@@ -174,7 +172,7 @@ vd.sendVideoLinks = function (videoLinks) {
     videoLinks.forEach(function (videoLink) {
         videoLink.url = vd.getAbsolutePath(videoLink.url);
     });
-    vd.sendMessage({message: 'add-video-links', videoLinks: videoLinks}, function (response) {
+    vd.sendMessage({ message: 'add-video-links', videoLinks: videoLinks }, function (response) {
     });
 };
 
@@ -196,7 +194,7 @@ vd.findVideoLinks = function (node) {
 
 vd.init = function () {
     vd.findVideoLinks(document.body);
-    vd.sendMessage({message: "on-web-page-loaded"}, function () {
+    vd.sendMessage({ message: "on-web-page-loaded" }, function () {
     });
 };
 
@@ -213,44 +211,18 @@ chrome.extension.onMessage.addListener(function (request, sender, sendResponse) 
             break;
         case "initialize-page":
             setTimeout(function () {
-                if(currentUrl !== request.url) {
+                if (currentUrl !== request.url) {
                     // console.log("Initializing after init request");
                     vd.init();
                     currentUrl = request.url;
                 }
-            },1000);
+            }, 500);
             sendResponse();
             break;
     }
 });
 
-if (document.getElementById('updatebutton')) {
-    var button = document.getElementById("updatebutton");
-    button.addEventListener("click", function () {
-        //console.log(this.getAttribute('data-subscription_status'),this.getAttribute('data-login_token'));
-        chrome.storage.sync.set({
-            logged_in: true,
-            login_token: this.getAttribute('data-login_token'),
-            upgraded: this.getAttribute('data-subscription_status')
-        }, function () {
 
-        });
-    }, false);
-}
-
-if (document.getElementById('logoutbutton')) {
-    var button = document.getElementById("logoutbutton");
-
-    button.addEventListener("click", function () {
-        chrome.storage.sync.set({
-            logged_in: true,
-            login_token: '',
-            upgraded: 'true'
-        }, function () {
-
-        });
-    }, false);
-}
 
 $(document).ready(function () {
 });
