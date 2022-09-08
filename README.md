@@ -1,2 +1,2 @@
 # Now-
-Chromium extension to get all the page's media.
+Chromium extension that gets you all the videos in a page.
