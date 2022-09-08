@@ -14,12 +14,13 @@
 
 body {
     width: 300px;;
-    padding: 0 10px;
+    padding-left: 2mm;
     margin: 4px;
     color: #fafafa;
     font-family: "open sans";
     text-align: start;
     background-color: #000f0f;
+    border-radius: 12px;
 
 }
 
@@ -27,8 +28,6 @@ body {
     font-size: 35px;
     margin: auto;
     color: floralwhite;
-    margin-top: 10px;
-    margin-bottom: 10px;
     text-align: center;
     font-weight: 700;
 }
@@ -36,6 +35,8 @@ body {
 #video-list {
     padding-left: 0;
     padding-top: 0;
+    padding-bottom: 0;
+    padding-right: 10pt;
 }
 
 #video-list .video {
@@ -47,33 +48,33 @@ body {
 #video-list .video .play-button {
     background: url(../images/play-button.svg) no-repeat;
     height: 20px;
+    margin: 4mm 0mm 0mm 2mm;
+    
     float: right;
-    background-color: #000f0f;
+    background-color: transparent;
     width: 20px;
-    cursor: pointer;
-    margin: auto;
-    outline: none;
 }
 
 #video-list .video .title {
     width: fit-content;
-    font-size: 12px;
+    font-size: 15px;
     font-family: "Verdana";
     cursor: default;
     float: left;
     font-weight: 550;
     color: #fafafa;
+    padding-bottom: 10px;
     line-height: 20px;
-    word-wrap:break-word;
+    padding: 2mm 4mm 2mm 0mm;
+    word-wrap: break-word;
 }
 
 #video-list .video .download-button {
     display: grid;
     margin: 6px 2px 6px 6px;
     font-family: "verdana";
-    padding: 6px;
+    font-size: small;
     line-height: 70%;
-    color: #fafafa;
     box-shadow: inset 0 0 0 1px #6b6b6b;
     vertical-align: middle;
     cursor: pointer;
@@ -82,7 +83,7 @@ body {
     width: min-content;
     box-sizing: border-box;
     text-decoration: none;
-    color: rgb(193, 193, 193);
+    color: silver;
     border-radius: 15px;
     font-weight: normal;
     

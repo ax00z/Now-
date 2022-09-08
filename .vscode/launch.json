@@ -1,0 +1,10 @@
+{
+    "configurations": [
+        {
+            "type": "pwa-chrome",
+            "name": "https://youtube.com",
+            "request": "launch",
+            "url": "https://youtube.com"
+        }
+    ]
+}
